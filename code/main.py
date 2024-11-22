@@ -20,7 +20,6 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 def main():
     model = MLP(features.shape[1], param['hid_dim'], n_class, param).to(device)
-    factor = NeFactor(features.shape[1], param['hid_dim'], param).to(device)
 
     optimize_model = torch.optim.Adam(list(model.parameters()), lr=float(param['lr']), weight_decay=float(param['weight_decay']))
     optimize_factor = torch.optim.Adam(list(factor.parameters()), lr=1e-4, weight_decay=float(param['weight_decay']))
@@ -38,41 +37,19 @@ def main():
             
             model.train()
 
-            neg_idx = neg[idx]
-            src_idx = src[idx]
-            dst_idx = dst[idx]
+    
+            # # Learning interpolation coefficient
 
-            # # Learning interpolation coefficients
-            beta_src = factor(features[src_idx], features[dst_idx])
-            beta_dst = factor(features[dst_idx], features[src_idx])
-
-            y, z = model(features[neg_idx])
-            y1, z1 = model(features[src_idx])
-            y2, z2 = model(features[dst_idx])
-            y3, z3 = model(features[dst_idx] * beta_dst + features[src_idx] * (1-beta_dst))
-            y4, z4 = model(features[src_idx] * beta_src + features[dst_idx] * (1-beta_src))
-
-            # Neighborhood Self-Distillation
-            loss_ne = F.mse_loss(y1, z3) + F.mse_loss(y2, z4) - F.mse_loss(torch.softmax(y1, dim=-1), torch.softmax(z, dim=-1)) - F.mse_loss(torch.softmax(y2, dim=-1), torch.softmax(z, dim=-1))
-
-            loss_cla = torch.zeros((1)).to(device)
+            y, z = model(features)
             m = train_mask[src_idx]
-            if m.any().item():
-                target = labels[src_idx][m]
-                loss_cla += F.cross_entropy(y1[m], target, weight=weight) + F.cross_entropy(z3[m], target, weight=weight)
-
-            m = train_mask[dst_idx]
-            if m.any().item():
-                target = labels[dst_idx][m]
-                loss_cla += F.cross_entropy(y2[m], target, weight=weight) + F.cross_entropy(z4[m], target, weight=weight)
-
-            loss_total = loss_ne + param['alpha'] * loss_cla
+             = USKDLoss(channel=mid1[m].shape[1], num_classes=n_class)
+            loss_total=uSKDLoss
             optimize_model.zero_grad()
             optimize_factor.zero_grad()
             loss_total.backward()
             optimize_model.step()
-            optimize_factor.step()
-
+            
+          
         # Model Inferring
         model.eval()
         logits, _ = model(features)
