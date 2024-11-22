@@ -35,8 +35,5 @@ python main.py --dataset cora
 python main.py --model_mode
   ```
 
-where the *label_mode* denotes different dataset variants. **(1) 1:** training with 5 labels per class; **(2) 2:** training with 10 labels per class; **(3) 3**: training with 10 labels per class; **(4) 11:** training with label noise ratio 10%; **(5) 12:** training with label noise ratio 20%; **(6) 13:** training with label noise ratio 30%; **(7) 14:** training with label noise ratio 40%; **(8) 15:** training with label noise ratio 50%; **(9) 16:** training with label noise ratio 60%.
-
-
 
 
