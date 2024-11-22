@@ -42,8 +42,8 @@ def main():
 
             y, z = model(features)
             m = train_mask[src_idx]
-             = USKDLoss(channel=mid1[m].shape[1], num_classes=n_class)
-            loss_total=uSKDLoss
+             loss= USKDLoss(channel=mid1[m].shape[1], num_classes=n_class)
+            loss_total=loss
             optimize_model.zero_grad()
             optimize_factor.zero_grad()
             loss_total.backward()
