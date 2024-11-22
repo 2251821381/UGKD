@@ -4,8 +4,7 @@
 * main.py  
   * main() -- Train the model for node classification task with the proposed Neighborhood Self-Distillation module on six datasets.
 * model.py  
-  * MLP() -- A pure MLP-based architecture ans two prediction heads.
-  * NeFactor() -- Learning interpolation coefficients for interpolation between the target node and its ineighborhood nodes.
+  * MLP() -- A pure MLP-based architecture 
 * dataset.py  
 
   * dataloader() -- Load six datasets as well as their variants with different label rates and label noise.
