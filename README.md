@@ -1,8 +1,5 @@
 
 ## Description
-
-* main.py  
-  * main() -- Train the model for node classification task with the proposed Neighborhood Self-Distillation module on six datasets.
 * model.py  
   * MLP() -- A pure MLP-based architecture 
 * dataset.py  
